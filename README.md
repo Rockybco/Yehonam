@@ -30,16 +30,14 @@ yehonam-suds/
 ├── js/
 │   ├── cart.js             Shopping cart (localStorage)
 │   ├── shop.js             Stripe product loader
-│   └── main.js             Navigation, forms, general UI
+│   └── main.js             Navigation, general UI
 └── netlify/
     └── functions/
         ├── get-products.js     Fetches product list from Stripe
         ├── get-product.js      Fetches single product from Stripe
         ├── create-checkout.js  Creates Stripe Checkout Session
-        ├── webhook.js          Handles Stripe webhook events
         ├── verify-order.js     Verifies completed payment
-        ├── contact.js          Contact form handler
-        └── newsletter.js       Newsletter subscription handler
+        └── webhook.js          Handles Stripe webhook events
 ```
 
 ---
@@ -142,15 +140,6 @@ Replace the emoji placeholders in the category cards with actual product photogr
 ### 4.4 Update domain in sitemap.xml
 Replace `https://yehonam.com` with the actual domain.
 
-### 4.5 Set up contact form email
-In netlify/functions/contact.js, uncomment one of the email integrations:
-- Resend (recommended): npm install resend, add RESEND_API_KEY env var
-- SendGrid: npm install @sendgrid/mail, add SENDGRID_API_KEY env var
-- OR: add `data-netlify="true"` to the contact form tag for free Netlify Forms
-
-### 4.6 Set up newsletter (optional)
-In netlify/functions/newsletter.js, uncomment the Mailchimp or Klaviyo integration.
-
 ---
 
 ## Step 5: Test Everything
@@ -169,7 +158,6 @@ CVC: any 3 digits
 - [ ] Checkout redirects to Stripe
 - [ ] Stripe test payment completes
 - [ ] Confirmation page shows
-- [ ] Contact form sends
 - [ ] Mobile layout works
 - [ ] All nav links work
 

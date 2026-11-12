@@ -1,6 +1,6 @@
 /**
  * YEHONAM SUDS — MAIN JAVASCRIPT
- * Navigation, animations, FAQ, contact form, general UI
+ * Navigation, animations, FAQ, general UI
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -67,60 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 
-  // ---- CONTACT FORM ----
-  const contactForm = document.getElementById('contact-form');
-  if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = contactForm.querySelector('[type="submit"]');
-      const originalText = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = 'Sending...';
-
-      const data = new FormData(contactForm);
-      const payload = Object.fromEntries(data.entries());
-
-      try {
-        const res = await fetch('/.netlify/functions/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        if (!res.ok) throw new Error();
-        showFormSuccess(contactForm);
-      } catch {
-        showFormError(contactForm);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = originalText;
-      }
-    });
-  }
-
-  function showFormSuccess(form) {
-    const msg = form.querySelector('.form-success') || createMessage(form, 'success');
-    msg.textContent = 'Message sent! We\'ll be in touch within 24 hours.';
-    msg.style.display = 'block';
-    form.reset();
-    setTimeout(() => { msg.style.display = 'none'; }, 6000);
-  }
-
-  function showFormError(form) {
-    const msg = form.querySelector('.form-error') || createMessage(form, 'error');
-    msg.textContent = 'Failed to send. Please try again or email us at support@yehonam.com';
-    msg.style.display = 'block';
-    setTimeout(() => { msg.style.display = 'none'; }, 6000);
-  }
-
-  function createMessage(form, type) {
-    const el = document.createElement('div');
-    el.className = `form-${type}`;
-    el.style.cssText = `margin-top:12px;padding:12px 16px;border-radius:4px;font-size:0.9rem;display:none;background:${type === 'success' ? '#dcf0e6' : '#f8d7da'};color:${type === 'success' ? '#084D29' : '#721c24'};`;
-    form.appendChild(el);
-    return el;
-  }
-
   // ---- ORDER CONFIRMATION ----
   const confirmPage = document.getElementById('confirmation-wrap');
   if (confirmPage) {
@@ -169,31 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  // ---- NEWSLETTER (if present) ----
-  const newsletterForm = document.getElementById('newsletter-form');
-  if (newsletterForm) {
-    newsletterForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = newsletterForm.querySelector('input[type="email"]').value;
-      const btn = newsletterForm.querySelector('[type="submit"]');
-      btn.textContent = 'Subscribing...';
-      btn.disabled = true;
-
-      try {
-        await fetch('/.netlify/functions/newsletter', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        });
-      } catch {}
-
-      btn.textContent = 'Subscribed! ✓';
-      btn.style.background = 'var(--emerald)';
-      btn.style.color = 'white';
-      newsletterForm.reset();
-    });
-  }
 
   // ---- COOKIE NOTICE ----
   if (!localStorage.getItem('cookie-accepted')) {
