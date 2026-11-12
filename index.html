@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Yehonam Suds, Hair & Body — Beauty, Care & Confidence in Every Drop</title>
+  <meta name="description" content="Discover Yehonam Suds — premium haircare, skincare, bodycare and baby care products. Quality, affordable luxury for the whole family.">
+  <meta property="og:title" content="Yehonam Suds, Hair & Body">
+  <meta property="og:description" content="Beauty, Care & Confidence in Every Drop. Premium personal care for the entire family.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0E6B3B">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Store","name":"Yehonam Suds, Hair & Body","description":"Premium haircare, skincare, bodycare and baby care products","email":"support@yehonam.com","url":"https://yehonam.com"}
+  </script>
+</head>
+<body data-page="home">
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo" aria-label="Yehonam Suds Home">
+        <img src="images/logo.svg" alt="Yehonam Suds, Hair &amp; Body">
+      </a>
+
+      <ul class="navbar-links" role="list">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="navbar-actions">
+        <button aria-label="Search" onclick="document.getElementById('search-modal')?.classList.toggle('open')">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </button>
+        <a href="cart.html" style="position:relative" aria-label="Shopping cart">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span class="cart-count" aria-label="items in cart">0</span>
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile navigation">
+    <button class="mobile-menu-close" id="mobile-menu-close" aria-label="Close menu">✕</button>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="shop.html">Shop</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart</a>
+  </div>
+
+  <!-- HERO BANNER -->
+  <section class="hero" aria-label="Hero banner">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <span class="hero-eyebrow">Luxury Haircare, Skincare &amp; Bodycare</span>
+        <h1 class="hero-title">Beauty, Care &amp; <em>Confidence</em> in Every Drop.</h1>
+        <p class="hero-subtitle">Discover quality haircare, skincare and bodycare essentials designed to nourish, protect and enhance your natural beauty.</p>
+        <div class="hero-buttons">
+          <a href="shop.html" class="btn btn-primary">Shop Now</a>
+          <a href="about.html" class="btn btn-outline">Explore</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-img-wrapper">
+          <!-- REPLACE WITH: photo of a confident Black woman holding a Yehonam Suds product -->
+          <!-- Recommended: Professional studio shot, warm brown/emerald/gold tones, woman on right -->
+          <div class="hero-placeholder">
+            <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY YEHONAM SUDS? -->
+  <section class="why-section section-pad" aria-label="Why choose us">
+    <div class="container">
+      <div class="why-inner">
+        <div>
+          <span class="section-label">Our Promise</span>
+          <h2 class="section-title">Why Choose Yehonam Suds?</h2>
+          <p style="color:var(--gray-500);line-height:1.8;max-width:480px;">At Yehonam Suds, we believe every member of your family deserves access to luxurious, high-quality personal care. We combine premium ingredients with affordable pricing — because beauty should never be a compromise.</p>
+          <div class="why-features fade-in">
+            <div class="why-feature">
+              <div class="why-icon">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <div>
+                <h4>Premium Quality</h4>
+                <p>Every product crafted with carefully chosen, effective ingredients.</p>
+              </div>
+            </div>
+            <div class="why-feature">
+              <div class="why-icon">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div>
+                <h4>Safe &amp; Trusted</h4>
+                <p>Gentle formulas suitable for all skin types including sensitive skin.</p>
+              </div>
+            </div>
+            <div class="why-feature">
+              <div class="why-icon">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+              </div>
+              <div>
+                <h4>Family Care</h4>
+                <p>Products designed for everyone — from newborns to grandparents.</p>
+              </div>
+            </div>
+            <div class="why-feature">
+              <div class="why-icon">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <div>
+                <h4>Affordable Luxury</h4>
+                <p>Competitive prices that never sacrifice quality for cost.</p>
+              </div>
+            </div>
+          </div>
+          <a href="about.html" class="btn btn-outline-gold" style="margin-top:32px">Learn Our Story</a>
+        </div>
+        <div class="why-image-wrap fade-in">
+          <!-- REPLACE WITH: brand lifestyle image -->
+          <div class="why-img-placeholder">Brand Lifestyle Image</div>
+          <div class="why-badge">Trusted by<br>Families</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOP BY CATEGORY -->
+  <section class="categories-section section-pad" aria-label="Shop by category">
+    <div class="container text-center">
+      <span class="section-label">Collections</span>
+      <h2 class="section-title">Shop by Category</h2>
+      <p class="section-subtitle">Explore our complete range of personal care products for every need.</p>
+
+      <div class="categories-grid">
+        <!-- Haircare -->
+        <a href="shop.html?category=haircare" class="category-card fade-in" aria-label="Shop Haircare">
+          <div class="cat-img-wrap">
+            <!-- REPLACE WITH: professional haircare product image -->
+            <div class="cat-placeholder cat-haircare">🌿</div>
+          </div>
+          <div class="cat-overlay"><span>Shop Now</span></div>
+          <div class="cat-info">
+            <h3>Haircare</h3>
+            <p>Shampoos, conditioners, oils &amp; treatments</p>
+          </div>
+        </a>
+
+        <!-- Bodycare -->
+        <a href="shop.html?category=bodycare" class="category-card fade-in" aria-label="Shop Bodycare">
+          <div class="cat-img-wrap">
+            <div class="cat-placeholder cat-bodycare">💚</div>
+          </div>
+          <div class="cat-overlay"><span>Shop Now</span></div>
+          <div class="cat-info">
+            <h3>Bodycare</h3>
+            <p>Lotions, body washes, butters &amp; scrubs</p>
+          </div>
+        </a>
+
+        <!-- Skincare -->
+        <a href="shop.html?category=skincare" class="category-card fade-in" aria-label="Shop Skincare">
+          <div class="cat-img-wrap">
+            <div class="cat-placeholder cat-skincare">✨</div>
+          </div>
+          <div class="cat-overlay"><span>Shop Now</span></div>
+          <div class="cat-info">
+            <h3>Skincare</h3>
+            <p>Cleansers, moisturisers, serums &amp; masks</p>
+          </div>
+        </a>
+
+        <!-- Baby Care -->
+        <a href="shop.html?category=babycare" class="category-card fade-in" aria-label="Shop Baby Care">
+          <div class="cat-img-wrap">
+            <div class="cat-placeholder cat-babycare">🌸</div>
+          </div>
+          <div class="cat-overlay"><span>Shop Now</span></div>
+          <div class="cat-info">
+            <h3>Baby Care</h3>
+            <p>Gentle products for your little ones</p>
+          </div>
+        </a>
+
+        <!-- Home Care -->
+        <a href="shop.html?category=homecare" class="category-card fade-in" aria-label="Shop Home Care">
+          <div class="cat-img-wrap">
+            <div class="cat-placeholder cat-homecare">🏠</div>
+          </div>
+          <div class="cat-overlay"><span>Shop Now</span></div>
+          <div class="cat-info">
+            <h3>Home Care</h3>
+            <p>Household cleaning &amp; freshness products</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="featured-section section-pad" aria-label="Featured products">
+    <div class="container text-center">
+      <span class="section-label">Hand-Picked Favourites</span>
+      <h2 class="section-title">Our Favourite Products</h2>
+      <p class="section-subtitle">Bestsellers loved by our customers — quality you can feel in every use.</p>
+
+      <div class="products-grid" id="featured-products">
+        <!-- Dynamically loaded from Stripe -->
+        <div class="loading-spinner" style="grid-column:1/-1">
+          <div class="spinner"></div>
+          <p>Loading products...</p>
+        </div>
+      </div>
+
+      <a href="shop.html" class="btn btn-dark" style="margin-top:40px">View All Products</a>
+    </div>
+  </section>
+
+  <!-- CUSTOMER REVIEWS -->
+  <section class="reviews-section section-pad" aria-label="Customer reviews">
+    <div class="container text-center">
+      <span class="section-label">Real Customers, Real Results</span>
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-subtitle">Genuine reviews from the families who trust Yehonam Suds every day.</p>
+
+      <div class="reviews-grid">
+        <div class="review-card fade-in">
+          <div class="review-quote">"</div>
+          <div class="review-stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <p class="review-text">The hair oil is absolutely incredible. My natural hair has never felt this nourished. I've tried so many brands and nothing compares to Yehonam Suds.</p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">A</div>
+            <div>
+              <div class="reviewer-name">Amara O.</div>
+              <div class="reviewer-location">Lagos, Nigeria</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card fade-in">
+          <div class="review-quote">"</div>
+          <div class="review-stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <p class="review-text">I use the baby wash on my 8-month-old and it's so gentle. No irritation whatsoever. The scent is beautiful too — not overwhelming at all. Highly recommend!</p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">F</div>
+            <div>
+              <div class="reviewer-name">Faith M.</div>
+              <div class="reviewer-location">Abuja, Nigeria</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card fade-in">
+          <div class="review-quote">"</div>
+          <div class="review-stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <p class="review-text">The body butter is rich without being greasy. My skin has stayed moisturised all day. The packaging is gorgeous too — feels like a luxury gift every time.</p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">T</div>
+            <div>
+              <div class="reviewer-name">Tolani K.</div>
+              <div class="reviewer-location">Port Harcourt, Nigeria</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section section-pad" aria-label="Frequently asked questions">
+    <div class="container text-center">
+      <span class="section-label">Got Questions?</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Everything you need to know about Yehonam Suds, our products and your orders.</p>
+
+      <div class="faq-list" style="text-align:left">
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>What is Yehonam Suds, Hair &amp; Body?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yehonam Suds is a premium beauty and personal care brand offering haircare, skincare, bodycare, baby care and home care products. We're committed to quality, affordability and making luxurious self-care accessible to every family.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Are your products safe for sensitive skin?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. Our formulas are designed to be gentle and effective for all skin types. If you have specific allergies or skin conditions, we recommend reviewing the ingredients listed on each product page. When in doubt, please contact us.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How do I pay for my order?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>We accept all major credit and debit cards, Apple Pay and Google Pay through our secure Stripe checkout. All transactions are encrypted and your card details are never stored on our website.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How long does delivery take?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Standard delivery takes 3–5 working days. Express delivery (1–2 working days) is also available. Free shipping applies to all orders over £50. International orders may take 7–14 working days depending on destination.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Can I return a product if I'm not happy?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. We offer a 30-day return policy for unused, unopened products in original packaging. For hygiene reasons, opened personal care products cannot be returned unless they are defective. See our <a href="shipping.html" style="color:var(--emerald)">Shipping &amp; Returns</a> page for full details.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How do I contact customer support?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Email us at <a href="mailto:support@yehonam.com" style="color:var(--emerald)">support@yehonam.com</a> or use the WhatsApp button on this page. We respond within 24 hours Monday–Friday.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Do you ship internationally?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, we ship to many countries worldwide. International shipping costs and delivery times are calculated at checkout based on your location. Some restrictions may apply to certain destinations.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <a href="faq.html" class="btn btn-outline-gold" style="margin-top:40px">View All FAQs</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img class="footer-logo" src="images/logo.svg" alt="Yehonam Suds">
+          <p>Beauty, Care &amp; Confidence in Every Drop. Premium personal care products for the whole family.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Categories</h4>
+          <ul>
+            <li><a href="shop.html?category=haircare">Haircare</a></li>
+            <li><a href="shop.html?category=bodycare">Bodycare</a></li>
+            <li><a href="shop.html?category=skincare">Skincare</a></li>
+            <li><a href="shop.html?category=babycare">Baby Care</a></li>
+            <li><a href="shop.html?category=homecare">Home Care</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Legal &amp; Support</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+            <li><a href="shipping.html">Shipping &amp; Returns</a></li>
+          </ul>
+          <div style="margin-top:20px">
+            <div class="footer-contact-item">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:support@yehonam.com">support@yehonam.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p style="color:rgba(255,255,255,0.4)">© 2026 Yehonam Suds, Hair &amp; Body. All Rights Reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="shipping.html">Shipping</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FLOAT -->
+  <!-- REPLACE +1234567890 with actual WhatsApp business number -->
+  <a href="https://wa.me/1234567890?text=Hello%20Yehonam%20Suds!%20I%20would%20love%20to%20know%20more%20about%20your%20products."
+     class="whatsapp-float"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Chat on WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+  </a>
+
+  <script src="js/cart.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

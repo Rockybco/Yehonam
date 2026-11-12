@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Order Confirmed — Yehonam Suds, Hair & Body</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="confirmation">
+
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo"><img src="images/logo-header.svg" alt="Yehonam Suds, Hair &amp; Body"></a>
+      <ul class="navbar-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <a href="cart.html" style="position:relative" aria-label="Cart">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span class="cart-count">0</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="confirmation-section" id="confirmation-wrap">
+    <div class="container">
+      <div class="confirmation-icon">
+        <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h1>Order Confirmed!</h1>
+      <p>Thank you for shopping with Yehonam Suds. Your payment has been processed securely and your order is being prepared.</p>
+
+      <div class="order-summary-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--gray-200)">
+          <span style="font-size:0.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--dark-green)">Order Reference</span>
+          <span id="order-number" style="font-weight:700;color:var(--gold);font-family:Georgia,serif;font-style:italic">Processing...</span>
+        </div>
+        <p id="confirmation-email-line" style="font-size:0.9rem;color:var(--gray-500);margin-bottom:0">
+          A confirmation email will be sent to your registered email address. If you don't see it, check your spam folder.
+        </p>
+      </div>
+
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+        <a href="shop.html" class="btn btn-primary">Continue Shopping</a>
+        <a href="contact.html" class="btn btn-outline-gold">Contact Support</a>
+      </div>
+
+      <div style="margin-top:48px;padding-top:40px;border-top:1px solid var(--gray-200);display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:600px;margin-left:auto;margin-right:auto">
+        <div style="text-align:center">
+          <div style="font-size:1.5rem;margin-bottom:8px">📦</div>
+          <div style="font-size:0.82rem;font-weight:600;color:var(--dark-green);margin-bottom:4px">Processing</div>
+          <div style="font-size:0.78rem;color:var(--gray-500)">Order being prepared</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:1.5rem;margin-bottom:8px">🚚</div>
+          <div style="font-size:0.82rem;font-weight:600;color:var(--dark-green);margin-bottom:4px">Shipping</div>
+          <div style="font-size:0.78rem;color:var(--gray-500)">3–5 working days</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:1.5rem;margin-bottom:8px">✨</div>
+          <div style="font-size:0.82rem;font-weight:600;color:var(--dark-green);margin-bottom:4px">Delivered</div>
+          <div style="font-size:0.78rem;color:var(--gray-500)">Enjoy your products</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" style="margin-top:80px">
+    <div class="container">
+      <div class="footer-bottom"><p style="color:rgba(255,255,255,0.4)">© 2026 Yehonam Suds, Hair &amp; Body. All Rights Reserved.</p></div>
+    </div>
+  </footer>
+
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
