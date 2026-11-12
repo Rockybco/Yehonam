@@ -10,6 +10,7 @@
   --emerald:    #0E6B3B;
   --gold:       #E8B84B;
   --black:      #000000;
+  --deep-black: #000803;
   --dark-green: #084D29;
   --light-gold: #F7DC86;
   --ivory:      #06120C;
@@ -352,7 +353,7 @@ h1, h2, h3, h4, h5 {
 /* --- HERO BANNER --- */
 .hero {
   min-height: 90vh;
-  background: linear-gradient(135deg, var(--dark-green) 0%, var(--emerald) 50%, #0E6B3B 100%);
+  background: linear-gradient(135deg, var(--deep-black) 0%, var(--deep-black) 55%, #06120C 100%);
   display: flex;
   align-items: center;
   position: relative;
