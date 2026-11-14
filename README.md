@@ -124,7 +124,9 @@ Add this as STRIPE_WEBHOOK_SECRET in Vercel environment variables.
 ## Step 4: Configure the Site
 
 ### 4.1 Update WhatsApp number
-Search all HTML files for `1234567890` and replace with the actual WhatsApp business number (international format, no + or spaces).
+The WhatsApp number is currently **+1 (770) 241-9809** (`17702419809` in the
+`wa.me` links). To change it, search all HTML files for `17702419809` and
+replace with the new number in international format (no +, spaces or symbols).
 Example: +44 7700 900000 → becomes 447700900000
 
 ### 4.2 Add hero image
