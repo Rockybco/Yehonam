@@ -2,7 +2,7 @@
 
 ## Overview
 Full e-commerce website built with HTML, CSS, Vanilla JS and Stripe.  
-Hosted on Netlify with serverless functions for secure Stripe operations.
+Hosted on Netlify or Vercel with serverless functions for secure Stripe operations.
 
 ---
 
@@ -24,6 +24,7 @@ yehonam-suds/
 ├── sitemap.xml             SEO sitemap
 ├── robots.txt              Search engine rules
 ├── netlify.toml            Netlify deployment config
+├── vercel.json             Vercel deployment config (build fix + rewrites)
 ├── package.json            Node.js dependencies
 ├── css/
 │   └── style.css           Complete brand stylesheet
@@ -31,14 +32,23 @@ yehonam-suds/
 │   ├── cart.js             Shopping cart (localStorage)
 │   ├── shop.js             Stripe product loader
 │   └── main.js             Navigation, general UI
+├── api/                    Vercel serverless functions
+│   ├── get-products.js     Fetches product list from Stripe
+│   ├── get-product.js      Fetches single product from Stripe
+│   ├── create-checkout.js  Creates Stripe Checkout Session
+│   ├── verify-order.js     Verifies completed payment
+│   └── webhook.js          Handles Stripe webhook events
 └── netlify/
-    └── functions/
-        ├── get-products.js     Fetches product list from Stripe
-        ├── get-product.js      Fetches single product from Stripe
-        ├── create-checkout.js  Creates Stripe Checkout Session
-        ├── verify-order.js     Verifies completed payment
-        └── webhook.js          Handles Stripe webhook events
+    └── functions/          Netlify serverless functions (same 5 as api/)
+        ├── get-products.js
+        ├── get-product.js
+        ├── create-checkout.js
+        ├── verify-order.js
+        └── webhook.js
 ```
+
+Note: the frontend calls `/.netlify/functions/*`. On Vercel, `vercel.json` rewrites
+those paths to `/api/*`, so the same frontend code works on both hosts.
 
 ---
 
@@ -102,12 +112,37 @@ Add these:
 
 ---
 
+## Step 2B: Deploy to Vercel (alternative)
+
+The repo is fully configured for Vercel as well — `vercel.json` handles everything:
+
+- **Build fix**: install command is `npm install --omit=dev`, which installs only
+  `stripe` and skips the `netlify-cli` dev tool that crashes Vercel's build
+- **Function rewrite**: the frontend's `/.netlify/functions/*` calls are rewritten
+  to `/api/*`, so no frontend code changes were needed
+- **Pretty URLs + security headers**: mirrored from `netlify.toml`
+
+### Steps
+1. Push this repo to GitHub
+2. Vercel dashboard → Add New → Project → import the repo (framework preset: Other)
+3. Add environment variables (Project → Settings → Environment Variables):
+   - `STRIPE_SECRET_KEY` — sk_... (Stripe Dashboard → Developers → API keys)
+   - `STRIPE_WEBHOOK_SECRET` — whsec_... (see Step 3)
+   - `SITE_URL` — `https://your-project.vercel.app`
+4. Deploy — the build passes and the store uses the `/api/*` functions automatically
+
+Webhook endpoint URL on Vercel: `https://your-project.vercel.app/api/webhook`
+
+---
+
 ## Step 3: Set Up Stripe Webhook
 
 ### 3.1 Add webhook endpoint
 Stripe Dashboard → Developers → Webhooks → Add endpoint
 
-Endpoint URL: `https://your-netlify-site.netlify.app/.netlify/functions/webhook`
+Endpoint URL:
+- Netlify: `https://your-netlify-site.netlify.app/.netlify/functions/webhook`
+- Vercel: `https://your-project.vercel.app/api/webhook`
 
 Events to listen for:
 - checkout.session.completed
@@ -117,7 +152,7 @@ Events to listen for:
 
 ### 3.2 Get the webhook secret
 After creating the endpoint, Stripe shows a signing secret (whsec_...).
-Add this as STRIPE_WEBHOOK_SECRET in Netlify environment variables.
+Add this as STRIPE_WEBHOOK_SECRET in Netlify or Vercel environment variables.
 
 ---
 
@@ -163,7 +198,7 @@ CVC: any 3 digits
 
 ### 5.3 Switch to live mode
 Once testing is complete:
-1. Replace sk_test_... with sk_live_... in Netlify env vars
+1. Replace sk_test_... with sk_live_... in Netlify/Vercel env vars
 2. Create a new webhook endpoint for live mode (separate from test)
 3. Replace whsec_test_... with the live whsec_...
 
