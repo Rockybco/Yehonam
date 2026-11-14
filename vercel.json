@@ -1,6 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "npm install --omit=dev",
+  "outputDirectory": ".",
   "functions": {
     "api/**/*.js": {
       "installCommand": "npm install --omit=dev"
