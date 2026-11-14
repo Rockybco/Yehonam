@@ -3,13 +3,10 @@
   "version": "1.0.0",
   "description": "Yehonam Suds, Hair & Body - Luxury Beauty E-Commerce",
   "scripts": {
-    "dev": "netlify dev",
+    "dev": "npx vercel dev",
     "build": "echo 'No build step required for static site'"
   },
   "dependencies": {
     "stripe": "^14.0.0"
-  },
-  "devDependencies": {
-    "netlify-cli": "^17.0.0"
   }
 }

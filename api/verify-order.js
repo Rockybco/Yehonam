@@ -2,10 +2,6 @@
  * GET /api/verify-order?session_id=cs_xxx — Verifies a completed Stripe checkout session
  * Called from the confirmation page. Returns session details for display.
  *
- * Vercel port of netlify/functions/verify-order.js (Netlify copy kept intact).
- * The frontend still calls /.netlify/functions/verify-order, which vercel.json
- * rewrites to /api/verify-order.
- *
  * SETUP: Add STRIPE_SECRET_KEY to Vercel environment variables.
  */
 

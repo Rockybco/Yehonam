@@ -1,10 +1,7 @@
 /**
  * POST /api/webhook — Handles Stripe webhook events
  *
- * Vercel port of netlify/functions/webhook.js (Netlify copy kept intact).
- * Stripe endpoint URL on Vercel: https://your-site.vercel.app/api/webhook
- * (The /.netlify/functions/webhook path also works via the vercel.json rewrite,
- * but use the /api/webhook URL when registering the endpoint with Stripe.)
+ * Stripe endpoint URL: https://your-site.vercel.app/api/webhook
  *
  * SETUP:
  * 1. Add STRIPE_SECRET_KEY to Vercel environment variables

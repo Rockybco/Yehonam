@@ -1,10 +1,6 @@
 /**
  * POST /api/create-checkout — Creates a Stripe Checkout Session
  *
- * Vercel port of netlify/functions/create-checkout.js (Netlify copy kept intact).
- * The frontend still calls /.netlify/functions/create-checkout, which vercel.json
- * rewrites to /api/create-checkout.
- *
  * SETUP:
  * 1. Add STRIPE_SECRET_KEY to Vercel environment variables
  * 2. Never expose this key in frontend code

@@ -7,7 +7,6 @@
     }
   },
   "rewrites": [
-    { "source": "/.netlify/functions/:slug", "destination": "/api/:slug" },
     { "source": "/about", "destination": "/about.html" },
     { "source": "/shop", "destination": "/shop.html" },
     { "source": "/contact", "destination": "/contact.html" },

@@ -12,7 +12,7 @@ const Shop = (() => {
   async function fetchProducts(params = {}) {
     try {
       const qs = new URLSearchParams(params).toString();
-      const res = await fetch(`/.netlify/functions/get-products${qs ? '?' + qs : ''}`);
+      const res = await fetch(`/api/get-products${qs ? '?' + qs : ''}`);
       if (!res.ok) throw new Error('Failed to load products');
       const data = await res.json();
       return data.products || [];
@@ -151,7 +151,7 @@ const Shop = (() => {
   // ---- LOAD SINGLE PRODUCT ----
   async function loadProduct(productId) {
     try {
-      const res = await fetch(`/.netlify/functions/get-product?id=${productId}`);
+      const res = await fetch(`/api/get-product?id=${productId}`);
       if (!res.ok) throw new Error('Product not found');
       return await res.json();
     } catch (err) {
@@ -379,7 +379,7 @@ async function proceedToCheckout() {
   if (btn) { btn.disabled = true; btn.textContent = 'Processing...'; }
 
   try {
-    const res = await fetch('/.netlify/functions/create-checkout', {
+    const res = await fetch('/api/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items, success_url: `${location.origin}/confirmation.html?session_id={CHECKOUT_SESSION_ID}`, cancel_url: `${location.origin}/cart.html` })

@@ -1,10 +1,6 @@
 /**
  * GET /api/get-product?id=prod_xxx — Fetches a single product from Stripe
  *
- * Vercel port of netlify/functions/get-product.js (Netlify copy kept intact).
- * The frontend still calls /.netlify/functions/get-product, which vercel.json
- * rewrites to /api/get-product.
- *
  * SETUP: Add STRIPE_SECRET_KEY to Vercel environment variables.
  */
 

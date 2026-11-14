@@ -2,10 +2,6 @@
  * GET /api/get-products — Fetches active products from Stripe
  * Supports: ?featured=true&limit=4&category=haircare
  *
- * Vercel port of netlify/functions/get-products.js (Netlify copy kept intact).
- * The frontend still calls /.netlify/functions/get-products, which vercel.json
- * rewrites to /api/get-products.
- *
  * SETUP: Add STRIPE_SECRET_KEY to Vercel environment variables.
  * Dashboard → Project → Settings → Environment Variables → STRIPE_SECRET_KEY
  */

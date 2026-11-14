@@ -2,7 +2,7 @@
 
 ## Overview
 Full e-commerce website built with HTML, CSS, Vanilla JS and Stripe.  
-Hosted on Netlify or Vercel with serverless functions for secure Stripe operations.
+Hosted on Vercel with serverless functions for secure Stripe operations.
 
 ---
 
@@ -23,8 +23,7 @@ yehonam-suds/
 ├── shipping.html           Shipping & Returns
 ├── sitemap.xml             SEO sitemap
 ├── robots.txt              Search engine rules
-├── netlify.toml            Netlify deployment config
-├── vercel.json             Vercel deployment config (build fix + rewrites)
+├── vercel.json             Vercel deployment config (build, headers, pretty URLs)
 ├── package.json            Node.js dependencies
 ├── css/
 │   └── style.css           Complete brand stylesheet
@@ -32,23 +31,13 @@ yehonam-suds/
 │   ├── cart.js             Shopping cart (localStorage)
 │   ├── shop.js             Stripe product loader
 │   └── main.js             Navigation, general UI
-├── api/                    Vercel serverless functions
-│   ├── get-products.js     Fetches product list from Stripe
-│   ├── get-product.js      Fetches single product from Stripe
-│   ├── create-checkout.js  Creates Stripe Checkout Session
-│   ├── verify-order.js     Verifies completed payment
-│   └── webhook.js          Handles Stripe webhook events
-└── netlify/
-    └── functions/          Netlify serverless functions (same 5 as api/)
-        ├── get-products.js
-        ├── get-product.js
-        ├── create-checkout.js
-        ├── verify-order.js
-        └── webhook.js
+└── api/                    Vercel serverless functions
+    ├── get-products.js     Fetches product list from Stripe
+    ├── get-product.js      Fetches single product from Stripe
+    ├── create-checkout.js  Creates Stripe Checkout Session
+    ├── verify-order.js     Verifies completed payment
+    └── webhook.js          Handles Stripe webhook events
 ```
-
-Note: the frontend calls `/.netlify/functions/*`. On Vercel, `vercel.json` rewrites
-those paths to `/api/*`, so the same frontend code works on both hosts.
 
 ---
 
@@ -84,54 +73,32 @@ You need:
 
 ---
 
-## Step 2: Deploy to Netlify
+## Step 2: Deploy to Vercel
 
-### 2.1 Create a Netlify account
-Go to https://netlify.com and sign up.
+The repo is fully configured for Vercel — `vercel.json` handles the build,
+security headers and pretty URLs. The serverless functions live in `api/`.
 
-### 2.2 Deploy the site
-Option A — Drag and drop:
-1. Go to Netlify → Sites
-2. Drag the entire yehonam-suds folder onto the deploy area
+### 2.1 Import the project
+1. Push this repo to GitHub
+2. Vercel dashboard → Add New → Project → import the repo (framework preset: Other)
+3. Deploy — no build configuration needed (install command is `npm install --omit=dev`)
 
-Option B — GitHub (recommended for ongoing updates):
-1. Push the folder to a GitHub repository
-2. Connect the repo in Netlify → New site from Git
-3. Build command: `npm install`
-4. Publish directory: `.` (the root)
-
-### 2.3 Add environment variables
-In Netlify: Site settings → Environment variables → Add a variable
+### 2.2 Add environment variables
+In Vercel: Project → Settings → Environment Variables
 
 Add these:
 | Variable | Value | Where to find |
 |----------|-------|---------------|
 | STRIPE_SECRET_KEY | sk_live_... | Stripe Dashboard → Developers → API keys |
 | STRIPE_WEBHOOK_SECRET | whsec_... | Step 3 below |
-| SITE_URL | https://yourdomain.com | Your actual domain |
+| SITE_URL | https://your-project.vercel.app | Your deployed Vercel URL |
 
----
+### 2.3 Local development (optional)
+Run `npm run dev` (starts `vercel dev` — the first run asks you to log in and
+link the project). Any static server also works for the HTML/CSS/JS pages.
 
-## Step 2B: Deploy to Vercel (alternative)
-
-The repo is fully configured for Vercel as well — `vercel.json` handles everything:
-
-- **Build fix**: install command is `npm install --omit=dev`, which installs only
-  `stripe` and skips the `netlify-cli` dev tool that crashes Vercel's build
-- **Function rewrite**: the frontend's `/.netlify/functions/*` calls are rewritten
-  to `/api/*`, so no frontend code changes were needed
-- **Pretty URLs + security headers**: mirrored from `netlify.toml`
-
-### Steps
-1. Push this repo to GitHub
-2. Vercel dashboard → Add New → Project → import the repo (framework preset: Other)
-3. Add environment variables (Project → Settings → Environment Variables):
-   - `STRIPE_SECRET_KEY` — sk_... (Stripe Dashboard → Developers → API keys)
-   - `STRIPE_WEBHOOK_SECRET` — whsec_... (see Step 3)
-   - `SITE_URL` — `https://your-project.vercel.app`
-4. Deploy — the build passes and the store uses the `/api/*` functions automatically
-
-Webhook endpoint URL on Vercel: `https://your-project.vercel.app/api/webhook`
+### 2.4 Redeploys
+Every push to `main` triggers an automatic Vercel deployment.
 
 ---
 
@@ -140,9 +107,7 @@ Webhook endpoint URL on Vercel: `https://your-project.vercel.app/api/webhook`
 ### 3.1 Add webhook endpoint
 Stripe Dashboard → Developers → Webhooks → Add endpoint
 
-Endpoint URL:
-- Netlify: `https://your-netlify-site.netlify.app/.netlify/functions/webhook`
-- Vercel: `https://your-project.vercel.app/api/webhook`
+Endpoint URL: `https://your-project.vercel.app/api/webhook`
 
 Events to listen for:
 - checkout.session.completed
@@ -152,7 +117,7 @@ Events to listen for:
 
 ### 3.2 Get the webhook secret
 After creating the endpoint, Stripe shows a signing secret (whsec_...).
-Add this as STRIPE_WEBHOOK_SECRET in Netlify or Vercel environment variables.
+Add this as STRIPE_WEBHOOK_SECRET in Vercel environment variables.
 
 ---
 
@@ -198,7 +163,7 @@ CVC: any 3 digits
 
 ### 5.3 Switch to live mode
 Once testing is complete:
-1. Replace sk_test_... with sk_live_... in Netlify/Vercel env vars
+1. Replace sk_test_... with sk_live_... in Vercel env vars
 2. Create a new webhook endpoint for live mode (separate from test)
 3. Replace whsec_test_... with the live whsec_...
 

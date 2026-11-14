@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function verifyOrder(sessionId) {
     try {
-      const res = await fetch(`/.netlify/functions/verify-order?session_id=${sessionId}`);
+      const res = await fetch(`/api/verify-order?session_id=${sessionId}`);
       if (!res.ok) throw new Error();
       const data = await res.json();
       renderConfirmation(data);
