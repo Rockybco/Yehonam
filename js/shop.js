@@ -145,7 +145,6 @@ const Shop = (() => {
     }
 
     container.innerHTML = products.map(renderProductCard).join('');
-    initFadeIn();
   }
 
   // ---- LOAD SINGLE PRODUCT ----
@@ -312,14 +311,10 @@ const Shop = (() => {
   }
 
   // ---- FADE IN ----
-  function initFadeIn() {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.fade-in:not(.visible)').forEach(el => obs.observe(el));
-  }
+  // Reveal animations are handled globally by main.js via IntersectionObserver,
+  // including cards injected after load.
 
-  return { loadFeatured, loadShop, renderProductPage, initFilters, renderFilteredProducts, initFadeIn };
+  return { loadFeatured, loadShop, renderProductPage, initFilters, renderFilteredProducts };
 })();
 
 // ---- GLOBAL HELPERS (called from inline HTML) ----
@@ -410,6 +405,4 @@ document.addEventListener('DOMContentLoaded', () => {
   if (page === 'product') {
     Shop.renderProductPage();
   }
-
-  Shop.initFadeIn();
 });
