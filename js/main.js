@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!localStorage.getItem('cookie-accepted')) {
     const banner = document.createElement('div');
     banner.id = 'cookie-banner';
-    banner.style.cssText = `position:fixed;bottom:0;left:0;right:0;background:var(--dark-green);color:rgba(255,255,255,0.85);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;z-index:9999;flex-wrap:wrap;font-size:0.85rem;`;
+    banner.style.cssText = `position:fixed;bottom:0;left:0;right:0;background:rgba(16,28,21,0.97);border-top:1px solid var(--line);color:rgba(236,233,222,0.8);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;z-index:9999;flex-wrap:wrap;font-size:0.85rem;backdrop-filter:blur(10px);`;
     banner.innerHTML = `
       <span>We use cookies to improve your experience. By using our site, you agree to our <a href="privacy.html" style="color:var(--light-gold);text-decoration:underline">Privacy Policy</a>.</span>
       <button onclick="document.getElementById('cookie-banner').remove();localStorage.setItem('cookie-accepted','1')" style="background:var(--gold);color:var(--black);border:none;padding:8px 20px;border-radius:4px;cursor:pointer;font-weight:600;font-size:0.82rem;white-space:nowrap;">Accept</button>
