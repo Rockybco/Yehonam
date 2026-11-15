@@ -124,8 +124,8 @@ Add this as STRIPE_WEBHOOK_SECRET in Vercel environment variables.
 ## Step 4: Configure the Site
 
 ### 4.1 Update WhatsApp number
-The WhatsApp number is currently **+44 7055 49465** (`44705549465` in the
-`wa.me` links). To change it, search all HTML files for `44705549465` and
+The WhatsApp number is currently **+1 470 554 9465** (`14705549465` in the
+`wa.me` links). To change it, search all HTML files for `14705549465` and
 replace with the new number in international format (no +, spaces or symbols).
 Example: +44 7700 900000 → becomes 447700900000
 
