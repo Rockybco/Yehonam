@@ -75,8 +75,8 @@ const Cart = (() => {
     document.dispatchEvent(new CustomEvent('cartUpdated', { detail: { count: getCount(), total: getTotal() } }));
   }
 
-  function formatPrice(pence) {
-    return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(pence / 100);
+  function formatPrice(cents) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
   }
 
   function showToast(message, type = 'success') {
@@ -138,17 +138,15 @@ const Cart = (() => {
       </div>
     `).join('');
 
-    // Update summary
+    // Update summary — shipping is calculated by Stripe at checkout
     const subtotal = getTotal();
-    const shipping = subtotal >= 5000 ? 0 : 395; // Free over £50
-    const total = subtotal + shipping;
 
     const sub = document.getElementById('summary-subtotal');
     const shp = document.getElementById('summary-shipping');
     const tot = document.getElementById('summary-total');
     if (sub) sub.textContent = formatPrice(subtotal);
-    if (shp) shp.textContent = shipping === 0 ? 'FREE' : formatPrice(shipping);
-    if (tot) tot.textContent = formatPrice(total);
+    if (shp) shp.textContent = 'Calculated at checkout';
+    if (tot) tot.textContent = formatPrice(subtotal);
   }
 
   // Build checkout line items for serverless function

@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
         images: p.images,
         priceId: price?.id || null,
         price: price?.unit_amount || 0,
-        currency: price?.currency || 'gbp',
+        currency: price?.currency || 'usd',
         metadata: p.metadata || {},
         active: p.active,
         created: p.created,

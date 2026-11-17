@@ -258,7 +258,7 @@ const Shop = (() => {
           ${product.metadata?.ingredients ? `<div class="tab-panel ${!product.metadata?.benefits ? 'active' : ''}" id="tab-ingredients"><p>${product.metadata.ingredients}</p></div>` : ''}
           ${product.metadata?.directions ? `<div class="tab-panel" id="tab-directions"><p>${product.metadata.directions}</p></div>` : ''}
           <div class="tab-panel" id="tab-shipping-info">
-            <p>We offer standard UK delivery (3–5 working days) and express delivery (1–2 working days). Free shipping on orders over £50. International shipping available. See our <a href="shipping.html" style="color:var(--gold)">Shipping & Returns</a> page for full details.</p>
+            <p>We offer standard delivery within the US (3–5 business days) and express delivery (1–2 business days). Shipping costs and fees are calculated at checkout. International shipping available. See our <a href="shipping.html" style="color:var(--gold)">Shipping & Returns</a> page for full details.</p>
           </div>
         </div>
       </div>

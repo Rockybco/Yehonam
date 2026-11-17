@@ -64,14 +64,14 @@ module.exports = async (req, res) => {
         {
           shipping_rate_data: {
             type: 'fixed_amount',
-            fixed_amount: { amount: 395, currency: 'gbp' },
+            fixed_amount: { amount: 395, currency: 'usd' },
             display_name: 'Standard Delivery (3–5 days)',
           },
         },
         {
           shipping_rate_data: {
             type: 'fixed_amount',
-            fixed_amount: { amount: 695, currency: 'gbp' },
+            fixed_amount: { amount: 695, currency: 'usd' },
             display_name: 'Express Delivery (1–2 days)',
           },
         },
