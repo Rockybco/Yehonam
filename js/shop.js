@@ -184,6 +184,9 @@ const Shop = (() => {
 
     document.title = `${product.name} — Yehonam Suds`;
 
+    const canonical = document.getElementById('canonical-link');
+    if (canonical) canonical.href = `https://yehonam.com/product.html?id=${encodeURIComponent(product.id)}`;
+
     wrap.innerHTML = `
       <div class="product-gallery">
         <div class="gallery-main" id="gallery-main">

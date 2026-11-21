@@ -91,7 +91,7 @@ Add these:
 |----------|-------|---------------|
 | STRIPE_SECRET_KEY | sk_live_... | Stripe Dashboard → Developers → API keys |
 | STRIPE_WEBHOOK_SECRET | whsec_... | Step 3 below |
-| SITE_URL | https://your-project.vercel.app | Your deployed Vercel URL |
+| SITE_URL | https://yehonam.com | Your live site URL |
 
 ### 2.3 Local development (optional)
 Run `npm run dev` (starts `vercel dev` — the first run asks you to log in and
@@ -107,7 +107,7 @@ Every push to `main` triggers an automatic Vercel deployment.
 ### 3.1 Add webhook endpoint
 Stripe Dashboard → Developers → Webhooks → Add endpoint
 
-Endpoint URL: `https://your-project.vercel.app/api/webhook`
+Endpoint URL: `https://yehonam.com/api/webhook`
 
 Events to listen for:
 - checkout.session.completed
@@ -139,8 +139,10 @@ Recommended: Professional studio photo, woman on right, product visible, warm to
 ### 4.3 Add category images
 Replace the emoji placeholders in the category cards with actual product photography.
 
-### 4.4 Update domain in sitemap.xml
-Replace `https://yehonam.com` with the actual domain.
+### 4.4 Domain
+The site uses `https://yehonam.com` in canonical links, `sitemap.xml` and
+`robots.txt`. Keep `yehonam.com` set as the **Primary** domain in Vercel so
+`www.yehonam.com` redirects to it. If the domain changes, update those references.
 
 ---
 

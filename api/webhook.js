@@ -1,7 +1,7 @@
 /**
  * POST /api/webhook — Handles Stripe webhook events
  *
- * Stripe endpoint URL: https://your-site.vercel.app/api/webhook
+ * Stripe endpoint URL: https://yehonam.com/api/webhook
  *
  * SETUP:
  * 1. Add STRIPE_SECRET_KEY to Vercel environment variables
