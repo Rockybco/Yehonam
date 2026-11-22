@@ -4,9 +4,11 @@
   "description": "Yehonam Suds, Hair & Body - Luxury Beauty E-Commerce",
   "scripts": {
     "dev": "npx vercel dev",
-    "build": "echo 'No build step required for static site'"
+    "build": "echo 'No build step required for static site'",
+    "test": "node tests/yehonam-api-tests.js"
   },
   "dependencies": {
+    "nodemailer": "^10.6.1",
     "stripe": "^14.0.0"
   }
 }

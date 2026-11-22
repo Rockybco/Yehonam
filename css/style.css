@@ -1477,8 +1477,9 @@ h1, h2, h3, h4, h5 {
   margin-top: 8px;
 }
 
-.coupon-row { display: flex; gap: 10px; margin: 20px 0; }
+.coupon-row { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
 .coupon-row input { flex: 1; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 10px 14px; font-size: 0.88rem; }
+.coupon-row button { flex: 0 0 auto; flex-shrink: 0; min-width: max-content; overflow: visible; }
 
 .empty-cart {
   text-align: center;

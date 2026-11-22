@@ -7,7 +7,9 @@
  * 1. Add STRIPE_SECRET_KEY to Vercel environment variables.
  * 2. Add STRIPE_WEBHOOK_SECRET to Vercel environment variables.
  *    Stripe Dashboard → Developers → Webhooks → Add endpoint
- *    Events: checkout.session.completed, payment_intent.payment_failed,
+ *    Events: checkout.session.completed and
+ *            checkout.session.async_payment_succeeded (both send the order
+ *            confirmation email for paid sessions), payment_intent.payment_failed,
  *            charge.refunded
  *
  * RAW BODY:
@@ -21,6 +23,8 @@
  * deduplication. The handlers below only log events. Stripe may retry a
  * delivery; repeated logging is safe, but no duplicate protection is claimed.
  */
+
+const { sendOrderConfirmationEmail } = require('../lib/email');
 
 const MAX_BODY_BYTES = 1024 * 1024;
 
@@ -108,15 +112,59 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: 'Invalid Stripe signature' });
   }
 
+  // Shared by completed/async-succeeded events: re-retrieve the session
+  // with expanded line items and the payment intent (the event payload is
+  // not guaranteed to contain the full product data needed by the email),
+  // then send the order confirmation email only when the session is
+  // verified as paid. Returns the email result when paid, otherwise null.
+  async function sendEmailForCompletedSession(event, eventName) {
+    const session = await stripe.checkout.sessions.retrieve(event.data.object.id, {
+      expand: ['line_items', 'payment_intent'],
+    });
+
+    if (!session || session.payment_status !== 'paid') {
+      console.log(
+        `[stripe] ${eventName} session=${event.data.object.id} ` +
+        `payment_status=${session ? session.payment_status : 'missing'} (not paid; no email)`
+      );
+      return null;
+    }
+
+    const result = await sendOrderConfirmationEmail(session, stripe);
+    console.log(
+      `[stripe] ${eventName} session=${session.id} ` +
+      `payment_status=${session.payment_status} ` +
+      `amount=${session.amount_total} ${session.currency} ` +
+      `email=${result.reason === 'already-sent' ? 'already-sent (deduped)' : (result.sent ? 'sent' : 'skipped')}`
+    );
+    return result;
+  }
+
+  // On SMTP failure return a non-2xx response so Stripe retries the webhook;
+  // the payment itself is untouched (this only re-runs webhook processing).
+  function emailRetryResponse(result) {
+    if (result && result.reason === 'send-failed') {
+      return res.status(500).json({
+        error: 'Order confirmation email failed; Stripe will retry the webhook',
+      });
+    }
+    return null;
+  }
+
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
-        const session = event.data.object;
-        console.log(
-          `[stripe] checkout.session.completed session=${session.id} ` +
-          `payment_status=${session.payment_status} ` +
-          `amount=${session.amount_total} ${session.currency}`
-        );
+        const retry = emailRetryResponse(await sendEmailForCompletedSession(event, 'checkout.session.completed'));
+        if (retry) return retry;
+        break;
+      }
+
+      case 'checkout.session.async_payment_succeeded': {
+        // Fires for delayed payment methods (e.g., bank accounts, Klarna)
+        // when the async payment completes. Only send the email when the
+        // session is verified as paid.
+        const retry = emailRetryResponse(await sendEmailForCompletedSession(event, 'checkout.session.async_payment_succeeded'));
+        if (retry) return retry;
         break;
       }
 

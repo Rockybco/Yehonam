@@ -8,6 +8,10 @@
  * confirmed only when this endpoint returns verified: true, which happens
  * only when Stripe reports payment_status === 'paid'.
  *
+ * This endpoint verifies the session and returns order information to the
+ * confirmation page. Order confirmation emails are sent from the Stripe
+ * webhook (api/webhook.js), not from here.
+ *
  * SETUP: Add STRIPE_SECRET_KEY to Vercel environment variables.
  */
 
