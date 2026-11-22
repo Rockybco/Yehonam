@@ -73,7 +73,7 @@
       <div class="receipt-card">
         <div class="receipt-brand">
           <a class="receipt-brand-link" href="https://www.yehonam.com">
-            <img class="receipt-brand-logo" src="images/logo.svg" width="210" height="71" alt="Yehonam — Suds, Hair &amp; Body">
+            <img class="receipt-brand-logo" src="images/logo-email.png" width="210" height="71" alt="Yehonam — Suds, Hair &amp; Body">
           </a>
         </div>
         ${content}
@@ -116,39 +116,64 @@
           </tr>`).join('')
       : '<tr><td class="receipt-empty" colspan="3">No items recorded</td></tr>';
 
+    const recipientRow = name
+      ? `<div class="receipt-row"><span class="receipt-row-label">Recipient</span><span class="receipt-row-value">${escapeHtml(name)}</span></div>`
+      : '';
+
     const discountRow = Number.isFinite(data.discount_amount) && data.discount_amount > 0
-      ? `<div class="receipt-row"><span class="receipt-row-label">Discount</span><span class="receipt-row-value">-${formatAmount(data.discount_amount, data.currency)}</span></div>`
+      ? `<div class="receipt-row"><span class="receipt-row-label">Discount</span><span class="receipt-row-value receipt-row-value--accent">-${formatAmount(data.discount_amount, data.currency)}</span></div>`
       : '';
     const taxRow = Number.isFinite(data.tax_amount) && data.tax_amount > 0
-      ? `<div class="receipt-row"><span class="receipt-row-label">Tax</span><span class="receipt-row-value">+${formatAmount(data.tax_amount, data.currency)}</span></div>`
+      ? `<div class="receipt-row"><span class="receipt-row-label">Tax</span><span class="receipt-row-value receipt-row-value--accent">+${formatAmount(data.tax_amount, data.currency)}</span></div>`
       : '';
 
     return receiptShell(`
-      <h1 class="receipt-heading">YOUR ORDER IS CONFIRMED!</h1>
-      <p class="receipt-sub">Payment successful.</p>
-      <p class="receipt-message">${greeting} — thank you for your order. Your payment has been received and your order is being prepared.</p>
-      <h2 class="receipt-section-title">ORDER INFORMATION</h2>
-      <div class="receipt-rows">${orderInfoRows(data)}</div>
-      <h2 class="receipt-section-title">YOUR ORDER</h2>
-      <table class="receipt-product-table">
-        <thead><tr><th>Product</th><th>Qty</th><th>Line Total</th></tr></thead>
-        <tbody>${productRows}</tbody>
-      </table>
-      <h2 class="receipt-section-title">PAYMENT SUMMARY</h2>
-      <div class="receipt-rows">
-        <div class="receipt-row"><span class="receipt-row-label">Subtotal</span><span class="receipt-row-value">${formatAmount(data.amount_subtotal, data.currency)}</span></div>
-        ${discountRow}${taxRow}
-        <div class="receipt-row receipt-row--total"><span class="receipt-row-label">Total paid</span><span class="receipt-row-value receipt-row-value--bold">${formatAmount(data.amount_total, data.currency)}</span></div>
+      <div class="receipt-confirmation">
+        <h1 class="receipt-heading">YOUR ORDER IS CONFIRMED!</h1>
+        <p class="receipt-sub">Payment successful</p>
+        <p class="receipt-message">${greeting} — thank you for your order. Your payment has been received and your order is being prepared.</p>
       </div>
-      <h2 class="receipt-section-title">DELIVERY DETAILS</h2>
-      <div class="receipt-rows">
-        <div class="receipt-row"><span class="receipt-row-label">Recipient</span><span class="receipt-row-value">${escapeHtml(name || 'Not provided')}</span></div>
-        <div class="receipt-row"><span class="receipt-row-label">Customer email</span><span class="receipt-row-value">${escapeHtml(customerEmail(data))}</span></div>
-        <div class="receipt-row"><span class="receipt-row-label">Shipping address</span><span class="receipt-row-value">${address}</span></div>
+      <div class="receipt-divider"></div>
+      <div class="receipt-section">
+        <h2 class="receipt-section-title">ORDER INFORMATION</h2>
+        <div class="receipt-rows">${orderInfoRows(data)}</div>
       </div>
-      <p class="receipt-delivery-info">Your delivery details have been received. Any applicable delivery charges will be communicated separately by the Yehonam team.</p>
-      <p class="receipt-assistance">Questions? Email us at <a class="receipt-link" href="mailto:support@yehonam.com">support@yehonam.com</a> or visit our website at <a class="receipt-link" href="https://www.yehonam.com">www.yehonam.com</a>.</p>
-      <div class="receipt-closing">
+      <div class="receipt-section">
+        <h2 class="receipt-section-title">YOUR ORDER</h2>
+        <table class="receipt-product-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Line Total</th>
+            </tr>
+          </thead>
+          <tbody>${productRows}</tbody>
+        </table>
+      </div>
+      <div class="receipt-section receipt-section--summary">
+        <h2 class="receipt-section-title">PAYMENT SUMMARY</h2>
+        <div class="receipt-rows">
+          <div class="receipt-row"><span class="receipt-row-label">Subtotal</span><span class="receipt-row-value receipt-row-value--accent">${formatAmount(data.amount_subtotal, data.currency)}</span></div>
+          ${discountRow}${taxRow}
+          <div class="receipt-row receipt-row--total"><span class="receipt-row-label">Total paid</span><span class="receipt-row-value">${formatAmount(data.amount_total, data.currency)}</span></div>
+        </div>
+      </div>
+      <div class="receipt-section receipt-section--delivery">
+        <h2 class="receipt-section-title">DELIVERY DETAILS</h2>
+        <div class="receipt-rows">
+          ${recipientRow}
+          <div class="receipt-row"><span class="receipt-row-label">Customer email</span><span class="receipt-row-value">${escapeHtml(customerEmail(data))}</span></div>
+          <div class="receipt-row"><span class="receipt-row-label">Shipping address</span><span class="receipt-row-value">${address}</span></div>
+        </div>
+      </div>
+      <div class="receipt-section receipt-section--tight">
+        <p class="receipt-delivery-info">Your delivery details have been received. Any applicable delivery charges will be communicated separately by the Yehonam team.</p>
+      </div>
+      <div class="receipt-section receipt-section--tight">
+        <p class="receipt-assistance">Questions? Email us at <a class="receipt-link" href="mailto:support@yehonam.com">support@yehonam.com</a> or visit our website at <a class="receipt-link" href="https://www.yehonam.com">www.yehonam.com</a>.</p>
+      </div>
+      <div class="receipt-section receipt-section--closing">
         <p class="receipt-closing-primary">Thank you for choosing Yehonam.</p>
         <p class="receipt-closing-secondary">With care, The Yehonam Team.</p>
         <a class="receipt-button" href="https://www.yehonam.com/shop">Continue Shopping</a>
@@ -159,10 +184,13 @@
 
   function stateReceipt(heading, message, data, withInfo, actionsHtml) {
     return receiptShell(`
-      <h1 class="receipt-heading">${escapeHtml(heading)}</h1>
-      <p class="receipt-message">${message}</p>
-      ${withInfo && data ? `<div class="receipt-rows">${orderInfoRows(data)}</div>` : ''}
-      ${actionsHtml ? `<div class="receipt-actions">${actionsHtml}</div>` : ''}
+      <div class="receipt-confirmation">
+        <h1 class="receipt-heading">${escapeHtml(heading)}</h1>
+        <p class="receipt-message">${message}</p>
+      </div>
+      <div class="receipt-divider"></div>
+      ${withInfo && data ? `<div class="receipt-section"><div class="receipt-rows">${orderInfoRows(data)}</div></div>` : ''}
+      ${actionsHtml ? `<div class="receipt-section receipt-section--actions"><div class="receipt-actions">${actionsHtml}</div></div>` : ''}
     `);
   }
 
