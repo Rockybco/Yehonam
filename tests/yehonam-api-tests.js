@@ -303,9 +303,11 @@ async function main() {
     payment_status: 'paid',
     status: 'complete',
     payment_intent: { status: 'succeeded' },
-    customer_details: { email: 'buyer@example.com' },
+    customer_details: { name: 'Buyer Example', email: 'buyer@example.com' },
+    amount_subtotal: 2500,
     amount_total: 2500,
     currency: 'usd',
+    total_details: { amount_discount: 0, amount_tax: 0, amount_shipping: 0 },
     line_items: { data: [{ description: 'Alpha Oil', quantity: 1, amount_total: 2500, currency: 'usd' }] },
     ...overrides,
   });
@@ -315,10 +317,12 @@ async function main() {
   const webhookSession = (overrides) => ({
     id: 'cs_test_1',
     payment_status: 'paid',
-    amount_total: 2500,
+    amount_subtotal: 2200,
+    amount_total: 1900,
     currency: 'usd',
-    customer_details: { email: 'emailwh@example.com' },
-    line_items: { data: [{ description: 'Alpha Oil', quantity: 1, amount_total: 2500, currency: 'usd' }] },
+    customer_details: { name: 'Ada Lovelace', email: 'emailwh@example.com' },
+    total_details: { amount_discount: 500, amount_tax: 200, amount_shipping: 0 },
+    line_items: { data: [{ description: 'Alpha Oil', quantity: 1, amount_total: 1900, currency: 'usd' }] },
     payment_intent: { id: 'pi_test_emailwh1', status: 'succeeded', metadata: {} },
     ...overrides,
   });
@@ -334,6 +338,30 @@ async function main() {
     stripeMock.checkout.sessions.retrieve = async () => session({ payment_status: 'unpaid', status: 'open', payment_intent: { status: 'requires_payment_method' } });
     const unpaid = await call(handlers.verify, reqBody('GET', null, { session_id: 'cs_test_pending1234' }));
     assert.strictEqual(unpaid.body.verified, false);
+  });
+
+  await test('verify-order returns receipt fields for paid sessions', async () => {
+    const receiptSession = session({
+      id: 'cs_test_receiptfields',
+      customer_details: { name: 'Receipt Person', email: 'receipt@example.com' },
+      amount_subtotal: 2200,
+      amount_total: 1900,
+      total_details: { amount_discount: 500, amount_tax: 200, amount_shipping: 0 },
+      shipping_details: {
+        name: 'Receipt Person',
+        address: { line1: '123 Main St', city: 'Denver', state: 'CO', postal_code: '80202', country: 'US' },
+      },
+      created: 1700000000,
+    });
+    stripeMock.checkout.sessions.retrieve = async () => receiptSession;
+    const out = await call(handlers.verify, reqBody('GET', null, { session_id: 'cs_test_receiptfields' }));
+    assert.strictEqual(out.status, 200);
+    assert.strictEqual(out.body.customer_name, 'Receipt Person');
+    assert.strictEqual(out.body.order_date, new Date(1700000000 * 1000).toISOString());
+    assert.strictEqual(out.body.amount_subtotal, 2200);
+    assert.strictEqual(out.body.discount_amount, 500);
+    assert.strictEqual(out.body.tax_amount, 200);
+    assert.deepStrictEqual(out.body.address, ['Receipt Person', '123 Main St', 'Denver', 'CO', '80202', 'US']);
   });
 
   await test('verify-order flags a failed payment intent', async () => {
@@ -443,8 +471,13 @@ async function main() {
     const mail = emailMock.sent.find((m) => m.to === 'emailwh@example.com');
     assert.ok(mail, 'an email is sent to the customer email from the session');
     assert.ok(String(mail.subject).startsWith('Order confirmed: #'), 'subject starts with "Order confirmed: #"');
+    assert.ok(mail.text.includes('Ada Lovelace'), 'text includes the customer name');
+    assert.ok(mail.text.includes('YOUR ORDER IS CONFIRMED!'), 'text includes the receipt heading');
     assert.ok(mail.text.includes('Alpha Oil'), 'text includes the purchased product');
-    assert.ok(mail.text.includes('Amount paid: $25.00'), 'text includes the amount paid');
+    assert.ok(mail.text.includes('Subtotal: $22.00'), 'text includes the subtotal');
+    assert.ok(mail.text.includes('Discount: -$5.00'), 'text includes the discount when applicable');
+    assert.ok(mail.text.includes('Tax: +$2.00'), 'text includes the tax when charged');
+    assert.ok(mail.text.includes('Total paid: $19.00'), 'text includes the total paid');
     assert.strictEqual(markerUpdatesFor(paidSession.payment_intent.id).length, 1, 'the PaymentIntent sent marker is persisted');
   });
 
@@ -471,7 +504,9 @@ async function main() {
     const mail = emailMock.sent.find((m) => m.to === 'emailwh@example.com');
     assert.ok(mail, 'an email is sent on async_payment_succeeded for a paid session');
     assert.ok(String(mail.subject).startsWith('Order confirmed: #'), 'subject starts with "Order confirmed: #"');
+    assert.ok(mail.text.includes('Ada Lovelace'), 'text includes the customer name');
     assert.ok(mail.text.includes('Alpha Oil'), 'text includes the purchased product');
+    assert.ok(mail.text.includes('Total paid: $19.00'), 'text includes the total paid');
     assert.strictEqual(markerUpdatesFor(asyncSession.payment_intent.id).length, 1, 'the PaymentIntent sent marker is persisted');
   });
 

@@ -19,9 +19,11 @@
  * function: that returns a parsed object and would break the signature.
  *
  * IMPORTANT:
- * This project has no database, order store, email service or event
- * deduplication. The handlers below only log events. Stripe may retry a
- * delivery; repeated logging is safe, but no duplicate protection is claimed.
+ * This project has no database or order store. Paid Checkout Sessions send a
+ * branded order confirmation email through lib/email.js, with PaymentIntent
+ * metadata and in-process guards to reduce duplicate deliveries. Failed
+ * payments and refunds are logged only. SMTP failures return a retryable
+ * response so Stripe can retry the webhook.
  */
 
 const { sendOrderConfirmationEmail } = require('../lib/email');
@@ -195,8 +197,8 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({ received: true });
   } catch (error) {
-    // Returning 500 tells Stripe to retry. Handlers only log today, so this
-    // path should be rare, but it is the correct signal if it happens.
+    // Returning 500 tells Stripe to retry. This is also used for SMTP send
+    // failures so a temporary mail problem does not lose the confirmation.
     console.error('Webhook handler error:', error.message);
     return res.status(500).json({ error: 'Webhook handler failed' });
   }

@@ -42,6 +42,37 @@ function safeEmail(value) {
   return email;
 }
 
+function extractCustomerName(session) {
+  const candidates = [
+    session.customer_details && typeof session.customer_details === 'object'
+      ? session.customer_details.name
+      : null,
+    session.customer_name,
+  ];
+  for (const candidate of candidates) {
+    if (typeof candidate === 'string' && candidate.trim()) {
+      return candidate.trim().slice(0, 80);
+    }
+  }
+  return null;
+}
+
+function extractAddressLines(session) {
+  const details = session.shipping_details;
+  if (!details || typeof details !== 'object') return [];
+  const address = details.address && typeof details.address === 'object' ? details.address : details;
+  const lines = [];
+  const name = typeof details.name === 'string' ? details.name.trim() : '';
+  if (name) lines.push(name);
+
+  ['line1', 'line2', 'city', 'state', 'postal_code', 'country'].forEach((key) => {
+    const value = address[key];
+    if (typeof value === 'string' && value.trim()) lines.push(value.trim());
+  });
+
+  return lines.slice(0, 8).map((line) => line.slice(0, 120));
+}
+
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('Pragma', 'no-cache');
@@ -94,6 +125,21 @@ module.exports = async (req, res) => {
       currency: typeof item.currency === 'string' ? item.currency : (session.currency || 'usd'),
     }));
 
+    const totalDetails = session.total_details && typeof session.total_details === 'object'
+      ? session.total_details
+      : null;
+    const amountDiscount = totalDetails && Number.isInteger(totalDetails.amount_discount)
+      ? Math.max(0, totalDetails.amount_discount)
+      : 0;
+    const amountTax = totalDetails && Number.isInteger(totalDetails.amount_tax)
+      ? Math.max(0, totalDetails.amount_tax)
+      : 0;
+    const amountSubtotal = Number.isInteger(session.amount_subtotal) && session.amount_subtotal >= 0
+      ? session.amount_subtotal
+      : (Number.isInteger(session.amount_total)
+        ? Math.max(0, session.amount_total - amountDiscount - amountTax)
+        : null);
+
     return res.status(200).json({
       // Only a paid session is treated as confirmed. This excludes sessions
       // where Stripe has not yet finalized the payment.
@@ -102,10 +148,18 @@ module.exports = async (req, res) => {
       status: typeof session.status === 'string' ? session.status : 'open',
       payment_failed: paymentFailed,
       order_reference: session.id,
+      customer_name: extractCustomerName(session),
+      order_date: typeof session.created === 'number' && session.created > 0
+        ? new Date(session.created * 1000).toISOString()
+        : null,
       email: safeEmail(session.customer_details && session.customer_details.email) ||
         safeEmail(session.customer_email),
       amount_total: Number.isInteger(session.amount_total) ? session.amount_total : null,
+      amount_subtotal: amountSubtotal,
       currency: typeof session.currency === 'string' ? session.currency : 'usd',
+      discount_amount: amountDiscount,
+      tax_amount: amountTax,
+      address: extractAddressLines(session),
       line_items: lineItems,
     });
   } catch (error) {

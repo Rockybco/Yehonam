@@ -1,13 +1,14 @@
 /**
- * YEHONAM SUDS — ORDER CONFIRMATION
+ * YEHONAM SUDS — ORDER CONFIRMATION (receipt-styled page)
  *
  * A redirect from Stripe is not proof of payment. This page asks the server
- * to verify the Checkout Session and only shows the success state when Stripe
+ * to verify the Checkout Session and only shows the receipt state when Stripe
  * reports payment_status === 'paid'. The cart is cleared only at that point.
  */
 
 (() => {
   const SESSION_ID_RE = /^cs_(test|live)_[A-Za-z0-9_]+$/;
+
   const loadingEl = document.getElementById('confirmation-loading');
   const resultEl = document.getElementById('confirmation-result');
   if (!loadingEl || !resultEl) return;
@@ -45,6 +46,13 @@
     }
   }
 
+  function formatReceiptDate(iso) {
+    if (typeof iso !== 'string' || !iso) return 'Not available';
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return 'Not available';
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
   function orderReference(data) {
     const raw = data && typeof data.order_reference === 'string' && data.order_reference
       ? data.order_reference
@@ -59,155 +67,148 @@
     return email && email.length <= 320 ? email : '';
   }
 
-  function lineItemsHtml(items) {
-    if (!Array.isArray(items) || items.length === 0) return '';
-
+  // ---- RECEIPT (page version of the branded order-confirmation email) ----
+  function receiptShell(content) {
     return `
-      <div class="order-items">
-        <div class="order-items-title">Items</div>
-        ${items.map((item) => {
-          const description = escapeHtml(
-            item && typeof item.description === 'string' ? item.description : 'Item'
-          );
-          const quantity = item && Number.isInteger(item.quantity) && item.quantity > 0
-            ? item.quantity
-            : 1;
-          const amount = item
-            ? formatAmount(item.amount_total, item.currency)
-            : 'Not available';
-
-          return `<div class="order-item-line"><span>${description} × ${quantity}</span><span>${amount}</span></div>`;
-        }).join('')}
+      <div class="receipt-card">
+        <div class="receipt-brand">
+          <a class="receipt-brand-link" href="https://www.yehonam.com">
+            <img class="receipt-brand-logo" src="images/logo.svg" width="210" height="71" alt="Yehonam — Suds, Hair &amp; Body">
+          </a>
+        </div>
+        ${content}
       </div>
     `;
   }
 
-  function orderDetails(data, statusText) {
-    const email = customerEmail(data);
+  function orderInfoRows(data) {
+    const address = (data.address || []).map((line) => escapeHtml(line)).join('<br>') || 'Not collected during checkout';
+    const status = data.payment_status
+      ? `${data.payment_status.charAt(0).toUpperCase()}${data.payment_status.slice(1)}`
+      : 'Unpaid';
 
     return `
-      <div class="order-summary-box">
-        <div class="order-detail-row">
-          <span>Order Reference</span>
-          <strong>${orderReference(data)}</strong>
-        </div>
-        ${email ? `
-          <div class="order-detail-row">
-            <span>Email</span>
-            <span>${escapeHtml(email)}</span>
-          </div>
-        ` : ''}
-        <div class="order-detail-row">
-          <span>${statusText === 'Paid' ? 'Amount Paid' : 'Status'}</span>
-          <strong>${statusText === 'Paid' ? formatAmount(data.amount_total, data.currency) : escapeHtml(statusText)}</strong>
-        </div>
-        ${statusText === 'Paid' ? lineItemsHtml(data.line_items) : ''}
-      </div>
+      <div class="receipt-row"><span class="receipt-row-label">Order reference</span><span class="receipt-row-value">${orderReference(data)}</span></div>
+      <div class="receipt-row"><span class="receipt-row-label">Order date</span><span class="receipt-row-value">${formatReceiptDate(data.order_date)}</span></div>
+      <div class="receipt-row"><span class="receipt-row-label">Payment status</span><span class="receipt-row-value receipt-row-value--paid">${escapeHtml(status)}</span></div>
     `;
   }
 
   function successHtml(data) {
-    return `
-      <div class="confirmation-icon">
-        <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <h1>Order Confirmed!</h1>
-      <p>Thank you for shopping with Yehonam Suds. Your payment has been confirmed by Stripe and your order is being prepared.</p>
+    const name = typeof data.customer_name === 'string' ? data.customer_name.trim() : '';
+    const greeting = name ? `Hello, ${escapeHtml(name)}` : 'Hello!';
+    const address = (data.address || []).map((line) => escapeHtml(line)).join('<br>') || 'Not collected during checkout';
 
-      ${orderDetails(data, 'Paid')}
+    const items = (data.line_items || []).map((item) => ({
+      name: item && typeof item.description === 'string' && item.description
+        ? item.description
+        : 'Product',
+      quantity: item && Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1,
+      lineTotal: item ? formatAmount(item.amount_total, item.currency) : 'Not available',
+    }));
 
-      <div class="confirmation-actions">
-        <a href="shop.html" class="btn btn-primary">Continue Shopping</a>
-        <a href="contact.html" class="btn btn-outline-gold">Contact Support</a>
-      </div>
+    const productRows = items.length
+      ? items.map((item) => `
+          <tr>
+            <td class="receipt-product-name">${escapeHtml(item.name)}</td>
+            <td class="receipt-product-qty">${item.quantity}</td>
+            <td class="receipt-product-total">${item.lineTotal}</td>
+          </tr>`).join('')
+      : '<tr><td class="receipt-empty" colspan="3">No items recorded</td></tr>';
 
-      <div class="confirmation-steps">
-        <div>
-          <div class="confirmation-step-icon">📦</div>
-          <div class="confirmation-step-title">Processing</div>
-          <div class="confirmation-step-text">Order being prepared</div>
-        </div>
-        <div>
-          <div class="confirmation-step-icon">🚚</div>
-          <div class="confirmation-step-title">Shipping</div>
-          <div class="confirmation-step-text">3–5 business days</div>
-        </div>
-        <div>
-          <div class="confirmation-step-icon">✨</div>
-          <div class="confirmation-step-title">Delivered</div>
-          <div class="confirmation-step-text">Enjoy your products</div>
-        </div>
+    const discountRow = Number.isFinite(data.discount_amount) && data.discount_amount > 0
+      ? `<div class="receipt-row"><span class="receipt-row-label">Discount</span><span class="receipt-row-value">-${formatAmount(data.discount_amount, data.currency)}</span></div>`
+      : '';
+    const taxRow = Number.isFinite(data.tax_amount) && data.tax_amount > 0
+      ? `<div class="receipt-row"><span class="receipt-row-label">Tax</span><span class="receipt-row-value">+${formatAmount(data.tax_amount, data.currency)}</span></div>`
+      : '';
+
+    return receiptShell(`
+      <h1 class="receipt-heading">YOUR ORDER IS CONFIRMED!</h1>
+      <p class="receipt-sub">Payment successful.</p>
+      <p class="receipt-message">${greeting} — thank you for your order. Your payment has been received and your order is being prepared.</p>
+      <h2 class="receipt-section-title">ORDER INFORMATION</h2>
+      <div class="receipt-rows">${orderInfoRows(data)}</div>
+      <h2 class="receipt-section-title">YOUR ORDER</h2>
+      <table class="receipt-product-table">
+        <thead><tr><th>Product</th><th>Qty</th><th>Line Total</th></tr></thead>
+        <tbody>${productRows}</tbody>
+      </table>
+      <h2 class="receipt-section-title">PAYMENT SUMMARY</h2>
+      <div class="receipt-rows">
+        <div class="receipt-row"><span class="receipt-row-label">Subtotal</span><span class="receipt-row-value">${formatAmount(data.amount_subtotal, data.currency)}</span></div>
+        ${discountRow}${taxRow}
+        <div class="receipt-row receipt-row--total"><span class="receipt-row-label">Total paid</span><span class="receipt-row-value receipt-row-value--bold">${formatAmount(data.amount_total, data.currency)}</span></div>
       </div>
-    `;
+      <h2 class="receipt-section-title">DELIVERY DETAILS</h2>
+      <div class="receipt-rows">
+        <div class="receipt-row"><span class="receipt-row-label">Recipient</span><span class="receipt-row-value">${escapeHtml(name || 'Not provided')}</span></div>
+        <div class="receipt-row"><span class="receipt-row-label">Customer email</span><span class="receipt-row-value">${escapeHtml(customerEmail(data))}</span></div>
+        <div class="receipt-row"><span class="receipt-row-label">Shipping address</span><span class="receipt-row-value">${address}</span></div>
+      </div>
+      <p class="receipt-delivery-info">Your delivery details have been received. Any applicable delivery charges will be communicated separately by the Yehonam team.</p>
+      <p class="receipt-assistance">Questions? Email us at <a class="receipt-link" href="mailto:support@yehonam.com">support@yehonam.com</a> or visit our website at <a class="receipt-link" href="https://www.yehonam.com">www.yehonam.com</a>.</p>
+      <div class="receipt-closing">
+        <p class="receipt-closing-primary">Thank you for choosing Yehonam.</p>
+        <p class="receipt-closing-secondary">With care, The Yehonam Team.</p>
+        <a class="receipt-button" href="https://www.yehonam.com/shop">Continue Shopping</a>
+        <p class="receipt-disclaimer">Automated order confirmation and payment receipt — your purchase has been recorded. Not an invoice.</p>
+      </div>
+    `);
+  }
+
+  function stateReceipt(heading, message, data, withInfo, actionsHtml) {
+    return receiptShell(`
+      <h1 class="receipt-heading">${escapeHtml(heading)}</h1>
+      <p class="receipt-message">${message}</p>
+      ${withInfo && data ? `<div class="receipt-rows">${orderInfoRows(data)}</div>` : ''}
+      ${actionsHtml ? `<div class="receipt-actions">${actionsHtml}</div>` : ''}
+    `);
   }
 
   function pendingHtml(data, noPaymentRequired) {
-    return `
-      <div class="confirmation-icon pending">
-        <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      </div>
-      <h1>Payment Pending</h1>
-      <p>${noPaymentRequired
+    return stateReceipt(
+      'Payment Pending',
+      noPaymentRequired
         ? 'This order did not require an online card payment, and it could not be confirmed automatically. Please contact support with the reference below.'
-        : "We haven't received payment confirmation from Stripe yet. If you completed checkout, wait a moment and check again. Your cart has not been cleared."
-      }</p>
-
-      ${orderDetails(data, noPaymentRequired ? 'Payment not required' : 'Pending')}
-
-      <div class="confirmation-actions">
-        <button type="button" class="btn btn-primary" data-retry>Check Again</button>
-        <a href="${noPaymentRequired ? 'contact.html' : 'cart.html'}" class="btn btn-outline-gold">
-          ${noPaymentRequired ? 'Contact Support' : 'Return to Cart'}
-        </a>
-      </div>
-    `;
+        : "We haven't received payment confirmation from Stripe yet. If you completed checkout, wait a moment and check again. Your cart has not been cleared.",
+      data,
+      true,
+      `
+        <button type="button" class="receipt-button" data-retry>Check Again</button>
+        <a class="receipt-button receipt-button--outline" href="${noPaymentRequired ? 'contact.html' : 'cart.html'}">${noPaymentRequired ? 'Contact Support' : 'Return to Cart'}</a>
+      `
+    );
   }
 
   function failedHtml(data) {
-    return `
-      <div class="confirmation-icon error">
-        <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      </div>
-      <h1>Payment Not Completed</h1>
-      <p>Stripe did not confirm this order as paid. Your cart has not been cleared, so you can review it and try again.</p>
-
-      ${orderDetails(data, 'Not paid')}
-
-      <div class="confirmation-actions">
-        <a href="cart.html" class="btn btn-primary">Return to Cart</a>
-        <a href="contact.html" class="btn btn-outline-gold">Contact Support</a>
-      </div>
-    `;
+    return stateReceipt(
+      'Payment Not Completed',
+      'Stripe did not confirm this order as paid. Your cart has not been cleared, so you can review it and try again.',
+      data,
+      true,
+      '<a class="receipt-button" href="cart.html">Return to Cart</a><a class="receipt-button receipt-button--outline" href="contact.html">Contact Support</a>'
+    );
   }
 
   function invalidHtml(message) {
-    return `
-      <div class="confirmation-icon error">
-        <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      </div>
-      <h1>Order Not Found</h1>
-      <p>${escapeHtml(message)} If you completed a payment, contact support with your receipt or order reference.</p>
-
-      <div class="confirmation-actions">
-        <a href="shop.html" class="btn btn-primary">Continue Shopping</a>
-        <a href="contact.html" class="btn btn-outline-gold">Contact Support</a>
-      </div>
-    `;
+    return stateReceipt(
+      'Order Not Found',
+      `${escapeHtml(message)} If you completed a payment, contact support with your receipt or order reference.`,
+      null,
+      false,
+      '<a class="receipt-button" href="shop.html">Continue Shopping</a><a class="receipt-button receipt-button--outline" href="contact.html">Contact Support</a>'
+    );
   }
 
   function errorHtml() {
-    return `
-      <div class="confirmation-icon error">
-        <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      </div>
-      <h1>Unable to Verify Order</h1>
-      <p>We couldn't reach the payment service. Your cart has not been cleared. Please check your connection and try again.</p>
-
-      <div class="confirmation-actions">
-        <button type="button" class="btn btn-primary" data-retry>Try Again</button>
-        <a href="contact.html" class="btn btn-outline-gold">Contact Support</a>
-      </div>
-    `;
+    return stateReceipt(
+      'Unable to Verify Order',
+      "We couldn't reach the payment service. Your cart has not been cleared. Please check your connection and try again.",
+      null,
+      false,
+      '<button type="button" class="receipt-button" data-retry>Try Again</button><a class="receipt-button receipt-button--outline" href="contact.html">Contact Support</a>'
+    );
   }
 
   function setLoading() {
