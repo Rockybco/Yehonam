@@ -73,16 +73,5 @@
   <script src="js/cart.js"></script>
   <script src="js/shop.js"></script>
   <script src="js/main.js"></script>
-  <script>
-    // Load related products after main product loads
-    document.addEventListener('DOMContentLoaded', async () => {
-      await Shop.renderProductPage();
-      // Load a few related products
-      const relatedContainer = document.getElementById('related-products');
-      if (relatedContainer) {
-        Shop.loadFeatured('related-products');
-      }
-    });
-  </script>
 </body>
 </html>

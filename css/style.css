@@ -194,6 +194,17 @@ h1, h2, h3, h4, h5 {
 .btn-sm { padding: 10px 20px; font-size: 0.8rem; }
 .btn-full { width: 100%; justify-content: center; }
 
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn:disabled::after,
+.btn[disabled]::after { display: none; }
+
 /* --- ANNOUNCEMENT BAR --- */
 .announcement-bar {
   background: var(--dark-green);
@@ -1251,6 +1262,8 @@ h1, h2, h3, h4, h5 {
 .gallery-thumb {
   width: 80px;
   height: 80px;
+  padding: 0;
+  background: var(--surface-3);
   border-radius: var(--radius);
   overflow: hidden;
   flex-shrink: 0;
@@ -1297,6 +1310,10 @@ h1, h2, h3, h4, h5 {
 }
 
 .product-desc { font-size: 0.95rem; line-height: 1.8; color: var(--gray-500); margin-bottom: 24px; }
+
+.product-unavailable { color: #e08a7f; font-size: 0.9rem; line-height: 1.7; margin-bottom: 24px; }
+
+.price-from { font-size: 0.9rem; font-weight: 500; color: var(--gray-500); }
 
 .product-options { margin-bottom: 24px; }
 
@@ -1415,6 +1432,8 @@ h1, h2, h3, h4, h5 {
 }
 
 .cart-item-variant { font-size: 0.82rem; color: var(--gray-500); margin-bottom: 10px; }
+
+.cart-item-unavailable { font-size: 0.82rem; color: #e08a7f; margin-bottom: 10px; }
 
 .cart-item-remove {
   background: none;
@@ -1666,6 +1685,102 @@ h1, h2, h3, h4, h5 {
   text-align: left;
 }
 
+.confirmation-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 48px 0;
+  color: var(--gray-500);
+}
+
+.confirmation-loading[hidden],
+.confirmation-result[hidden] { display: none; }
+
+.confirmation-icon.pending {
+  background: linear-gradient(135deg, #8a6d1f, #5c4a12);
+  color: var(--light-gold);
+}
+
+.confirmation-icon.error {
+  background: linear-gradient(135deg, #7a2a24, #451713);
+  color: #ffb4a8;
+}
+
+.order-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--gray-200);
+  font-size: 0.9rem;
+  color: var(--gray-500);
+}
+
+.order-detail-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.order-detail-row strong {
+  color: var(--light-gold);
+  font-weight: 600;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.order-items {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gray-200);
+}
+
+.order-items-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--light-gold);
+  margin-bottom: 10px;
+}
+
+.order-item-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px 0;
+  font-size: 0.88rem;
+  color: var(--gray-500);
+}
+
+.order-item-line span:last-child {
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.confirmation-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.confirmation-steps {
+  max-width: 600px;
+  margin: 48px auto 0;
+  padding-top: 40px;
+  border-top: 1px solid var(--gray-200);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.confirmation-step-icon { font-size: 1.5rem; margin-bottom: 8px; }
+.confirmation-step-title { font-size: 0.82rem; font-weight: 600; color: var(--light-gold); margin-bottom: 4px; }
+.confirmation-step-text { font-size: 0.78rem; color: var(--gray-500); }
+
 /* --- LEGAL PAGES --- */
 .legal-section {
   padding: 60px 0;
@@ -1712,6 +1827,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .toast.show { transform: translateY(0); opacity: 1; }
+.toast[data-type="error"] { background: #7a2a24; }
 .toast-icon { color: var(--gold); flex-shrink: 0; }
 
 /* --- FADE IN / SCROLL REVEAL --- */
@@ -1885,6 +2001,11 @@ h1, h2, h3, h4, h5 {
   .why-features { grid-template-columns: 1fr; }
   .hero-buttons { flex-direction: column; align-items: center; }
   .product-cta { flex-direction: column; }
+  .confirmation-steps { grid-template-columns: 1fr; gap: 24px; }
+  .confirmation-actions .btn { width: 100%; justify-content: center; }
+  .order-summary-box { padding: 24px; }
+  .order-detail-row { flex-direction: column; gap: 4px; }
+  .order-detail-row strong { text-align: left; }
 }
 
 /* --- REDUCED MOTION --- */

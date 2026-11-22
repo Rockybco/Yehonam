@@ -185,44 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ---- ORDER CONFIRMATION ----
-  const confirmPage = document.getElementById('confirmation-wrap');
-  if (confirmPage) {
-    const params = new URLSearchParams(location.search);
-    const sessionId = params.get('session_id');
-
-    if (sessionId) {
-      verifyOrder(sessionId);
-    }
-  }
-
-  async function verifyOrder(sessionId) {
-    try {
-      const res = await fetch(`/api/verify-order?session_id=${sessionId}`);
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      renderConfirmation(data);
-      Cart.clearCart();
-    } catch {
-      // Still show success — Stripe redirect implies payment succeeded
-      renderConfirmation(null);
-      Cart.clearCart();
-    }
-  }
-
-  function renderConfirmation(data) {
-    const wrap = document.getElementById('confirmation-wrap');
-    if (!wrap) return;
-
-    const orderRef = data?.id?.slice(-8).toUpperCase() || Math.random().toString(36).slice(-8).toUpperCase();
-    const email = data?.customer_details?.email || '';
-
-    const orderNumEl = document.getElementById('order-number');
-    const emailEl = document.getElementById('confirmation-email');
-    if (orderNumEl) orderNumEl.textContent = `#${orderRef}`;
-    if (emailEl && email) emailEl.textContent = email;
-  }
-
   // ---- SMOOTH SCROLL ----
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {

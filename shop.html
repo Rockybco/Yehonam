@@ -130,10 +130,12 @@
   <script src="js/main.js"></script>
   <script>
     function applyPriceFilter() {
-      const min = document.getElementById('price-min').value;
-      const max = document.getElementById('price-max').value;
-      Shop.activeFilters = { ...Shop.activeFilters, minPrice: min || null, maxPrice: max || null };
-      Shop.renderFilteredProducts(document.getElementById('shop-products'));
+      const minEl = document.getElementById('price-min');
+      const maxEl = document.getElementById('price-max');
+      Shop.setFilters({
+        minPrice: minEl && minEl.value ? minEl.value : null,
+        maxPrice: maxEl && maxEl.value ? maxEl.value : null,
+      });
     }
 
     // Style the category tab buttons
