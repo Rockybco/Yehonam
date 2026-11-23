@@ -639,6 +639,7 @@ const Shop = (() => {
     initFilters,
     renderFilteredProducts,
     setFilters,
+    getProduct: (id) => productCache.get(id),
   };
 })();
 
@@ -701,7 +702,7 @@ document.addEventListener('click', (event) => {
 
   const addButton = target.closest('[data-add-id]');
   if (addButton) {
-    const product = productCache.get(addButton.dataset.addId);
+    const product = Shop.getProduct(addButton.dataset.addId);
     if (!product || !product.priceId) {
       Cart.showToast('This product is currently unavailable.', 'error');
       return;

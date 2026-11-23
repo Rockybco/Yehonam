@@ -70,11 +70,6 @@
               <span id="summary-total">$0.00</span>
             </div>
 
-            <div class="coupon-row">
-              <input type="text" placeholder="Coupon code" id="coupon-input">
-              <button class="btn btn-outline-gold btn-sm" onclick="applyCoupon()">Apply</button>
-            </div>
-
             <button id="checkout-btn" class="btn btn-primary btn-full" onclick="proceedToCheckout()">
               Proceed to Checkout →
             </button>
@@ -109,11 +104,5 @@
   <script src="js/cart.js"></script>
   <script src="js/shop.js"></script>
   <script src="js/main.js"></script>
-  <script>
-    function applyCoupon() {
-      const code = document.getElementById('coupon-input').value.trim();
-      Cart.showToast(code ? `Coupon validation handled at Stripe checkout.` : 'Please enter a coupon code.');
-    }
-  </script>
 </body>
 </html>
